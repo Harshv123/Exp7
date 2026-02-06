@@ -14,7 +14,7 @@ function resetExperiment() {
 // VARIABLES (CLEANED â€” graph removed)
 // ---------------------------------------------
 const CONTACT_Y = 85; 
-const POINTER_DOWN_MS = 1500;
+const POINTER_DOWN_MS = 1000;
 const POINTER_UP_MS = 1200;
 let pointerState = "up"; 
 let animPhase = "idle";
@@ -219,41 +219,32 @@ function movedown() {
 
   pointerState = "touching";
 
-  // ✔ Pointer starts moving DOWN immediately
+  // ✔ Immediately show crack image as soon as pointer starts moving
+  const crackdiv = document.querySelector(".crack");
+  if (crackdiv) crackdiv.style.display = "block";
+
+  // ✔ Start crack animation immediately (sync with pointer start)
+  const crackDuration = holdTime > 0 ? holdTime * 1000 : undefined;
+  startFrameAnimationOnce({ durationMs: crackDuration, showNextButton: false });
+
+  // ✔ Now start moving pointer down
   pointer.style.transition = `transform ${POINTER_DOWN_MS / 1000}s linear`;
   pointer.style.transform = `translateY(${CONTACT_Y}px)`;
 
-  // ✔ AFTER 1 second → crack starts
-  setTimeout(() => {
-    // Show crack container
-    const crackdiv = document.querySelector(".crack");
-    if (crackdiv) crackdiv.style.display = "block";
-
-    // Start crack animation with correct duration
-    const crackDuration = holdTime > 0 ? holdTime * 1000 : undefined;
-    startFrameAnimationOnce({
-      durationMs: crackDuration,
-      showNextButton: false
-    });
-  }, 1000); // <-- crack delay
-
-  // AFTER pointer reaches bottom
+  // After reaching bottom (this is delayed)
   setTimeout(() => {
     console.log("Pointer reached the surface. Starting hold...");
 
-    // Change material image ONLY when pointer reaches base
+    // Change base image ONLY when pointer fully touches
     const img = document.getElementById("baseimage");
     if (img) {
       const newSrc = "./base2-1.png";
       img.setAttribute("href", newSrc);
-      img.setAttributeNS(
-        "http://www.w3.org/1999/xlink",
-        "xlink:href",
-        newSrc
-      );
+      img.setAttributeNS("http://www.w3.org/1999/xlink",
+        "xlink:href", newSrc);
     }
 
-    // HOLD the pointer
+    // HOLD
     setTimeout(() => {
       console.log("Holding finished. Pointer going up...");
       autoMovePointerUp();
