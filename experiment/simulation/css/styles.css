@@ -591,12 +591,12 @@ top: 5%;
 
 .crack{
 height: 70%;
-    width: 30%;
+    width: 20%;
     background: rgb(255, 255, 255);
     position: absolute;
-    margin: 5px;
-    padding: 5px;
-    left: 55%;
+    margin: 15px;
+    padding: 10px;
+    left: 50%;
     top: 12%;
     border-radius: 10px;
     border: 1px solid black;
@@ -626,10 +626,10 @@ height: 70%;
 }
 .crack .img img{
   
-  height: 90%;
+  height: 75%;
   display: block;
     object-fit: contain;
-  width: 60%;
+  width: 85%;
   height: auto;
   image-rendering: auto;
   will-change: contents;

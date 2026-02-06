@@ -213,52 +213,101 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
-
-
-
-
 function movedown() {
   const pointer = document.querySelector(".pointer");
   if (!pointer) return;
 
   pointerState = "touching";
 
-  // Move pointer down to contact point
+  // ✔ Pointer starts moving DOWN immediately
   pointer.style.transition = `transform ${POINTER_DOWN_MS / 1000}s linear`;
   pointer.style.transform = `translateY(${CONTACT_Y}px)`;
 
-  // After reaching bottom
+  // ✔ AFTER 1 second → crack starts
   setTimeout(() => {
+    // Show crack container
+    const crackdiv = document.querySelector(".crack");
+    if (crackdiv) crackdiv.style.display = "block";
 
+    // Start crack animation with correct duration
+    const crackDuration = holdTime > 0 ? holdTime * 1000 : undefined;
+    startFrameAnimationOnce({
+      durationMs: crackDuration,
+      showNextButton: false
+    });
+  }, 1000); // <-- crack delay
+
+  // AFTER pointer reaches bottom
+  setTimeout(() => {
     console.log("Pointer reached the surface. Starting hold...");
 
-    // Change material image AFTER pointer fully goes down
+    // Change material image ONLY when pointer reaches base
     const img = document.getElementById("baseimage");
     if (img) {
       const newSrc = "./base2-1.png";
       img.setAttribute("href", newSrc);
-      img.setAttributeNS("http://www.w3.org/1999/xlink", "xlink:href", newSrc);
+      img.setAttributeNS(
+        "http://www.w3.org/1999/xlink",
+        "xlink:href",
+        newSrc
+      );
     }
 
-    // Start crack frames when the indenter touches the sample
-    const crackDuration = holdTime > 0 ? holdTime * 1000 : undefined;
+    // HOLD the pointer
     setTimeout(() => {
-  startFrameAnimationOnce({ durationMs: crackDuration, showNextButton: false });
-});
-
-
-    // HOLD FOR GIVEN holdTime
-    setTimeout(() => {
-
       console.log("Holding finished. Pointer going up...");
-
-      // Now pointer goes up automatically
       autoMovePointerUp();
-
-    }, holdTime * 1000); // â³ HOLD HERE
+    }, holdTime * 1000);
 
   }, POINTER_DOWN_MS);
 }
+
+
+
+
+
+// function movedown() {
+//   const pointer = document.querySelector(".pointer");
+//   if (!pointer) return;
+
+//   pointerState = "touching";
+
+//   // Move pointer down to contact point
+//   pointer.style.transition = `transform ${POINTER_DOWN_MS / 1000}s linear`;
+//   pointer.style.transform = `translateY(${CONTACT_Y}px)`;
+
+//   // After reaching bottom
+//   setTimeout(() => {
+
+//     console.log("Pointer reached the surface. Starting hold...");
+
+//     // Change material image AFTER pointer fully goes down
+//     const img = document.getElementById("baseimage");
+//     if (img) {
+//       const newSrc = "./base2-1.png";
+//       img.setAttribute("href", newSrc);
+//       img.setAttributeNS("http://www.w3.org/1999/xlink", "xlink:href", newSrc);
+//     }
+
+//     // Start crack frames when the indenter touches the sample
+//     const crackDuration = holdTime > 0 ? holdTime * 1000 : undefined;
+//     setTimeout(() => {
+//   startFrameAnimationOnce({ durationMs: crackDuration, showNextButton: false });
+// });
+
+
+//     // HOLD FOR GIVEN holdTime
+//     setTimeout(() => {
+
+//       console.log("Holding finished. Pointer going up...");
+
+//       // Now pointer goes up automatically
+//       autoMovePointerUp();
+
+//     }, holdTime * 1000); // â³ HOLD HERE
+
+//   }, POINTER_DOWN_MS);
+// }
 
 
 
@@ -317,7 +366,7 @@ const frames = [
 ];
 
 // Speed control (fallback when no duration is provided)
-const frameSpeed = 400; // ms per frame
+const frameSpeed = 100; // ms per frame
 let frameTimer = null;
 
 function startFrameAnimationOnce(options = {}) {
