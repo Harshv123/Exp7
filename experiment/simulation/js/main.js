@@ -13,8 +13,8 @@ function resetExperiment() {
 // ---------------------------------------------
 // VARIABLES (CLEANED â€” graph removed)
 // ---------------------------------------------
-const CONTACT_Y = 60; 
-const POINTER_DOWN_MS = 1800;
+const CONTACT_Y = 85; 
+const POINTER_DOWN_MS = 1500;
 const POINTER_UP_MS = 1200;
 let pointerState = "up"; 
 let animPhase = "idle";
@@ -55,7 +55,7 @@ function display2d() {
     <div class="svg-base">
       <svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080">
         <image id='baseimage' width="1606" height="823"
-          transform="translate(166.5 147)" 
+          transform="translate(158.5 147)" 
           data-text="Material : metals, ceramics, polymers, composites, and biological tissues"
           xlink:href="base1-1.png"/>
       </svg>
@@ -127,10 +127,10 @@ function display3d() {
           <div class=crack>
     <h1>This is Top-view</h1>
     <div class="img">
-       <img id="frameImg" src="./frame/F1.png" alt="image">
+       <img id="frameImg" src="./frame/f9.png" alt="image">
     </div>
     `;
-  }, 1500);
+  }, 1000);
 
   // Display next button
   btnarray[marker].style.display='block';
@@ -242,7 +242,10 @@ function movedown() {
 
     // Start crack frames when the indenter touches the sample
     const crackDuration = holdTime > 0 ? holdTime * 1000 : undefined;
-    startFrameAnimationOnce({ durationMs: crackDuration, showNextButton: false });
+    setTimeout(() => {
+  startFrameAnimationOnce({ durationMs: crackDuration, showNextButton: false });
+});
+
 
     // HOLD FOR GIVEN holdTime
     setTimeout(() => {
